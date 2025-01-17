@@ -1,5 +1,3 @@
-
-
 from util.Observable import Observable
 
 
@@ -8,16 +6,12 @@ class GenderAppModel(Observable):
         super().__init__()
         self.input_text: str = ""
 
-    def set_input(self, text: str) -> None:
-        """
-        Aktualisiert den Text und benachrichtigt alle Observer.
-        """
+    def set_input_text(self, text: str) -> None:
+        # Setzt den aktuellen Text
         self.input_text: str = text
-        print("GenderAppModel.set_input:", text)
+        # Benachrichte alle Abonnenten des Observers
         self.notify_observers()
 
-    def get_input(self) -> str:
-        """
-        Gibt den aktuellen Text zurück.
-        """
+    def get_input_text(self) -> str:
+        # Gibt den aktuellen Text zurück
         return self.input_text

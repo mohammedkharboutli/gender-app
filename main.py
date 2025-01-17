@@ -4,11 +4,11 @@ from controller.GenderAppController import GenderAppController
 from model.GenderAppModel import GenderAppModel
 from view.GenderAppView import GenderAppView
 
+
 def main(page: ft.Page) -> None:
     page.theme_mode = "light"
     page.title = "Gender-App"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    # light mode
 
     # Initialisiere MVC-Komponenten
     model = GenderAppModel()
@@ -16,7 +16,8 @@ def main(page: ft.Page) -> None:
     controller = GenderAppController(model, view)
 
     # Füge die View-Komponenten zur Seite hinzu
-    page.add(view.build())
+    page.add(controller.view.build())
+
 
 # Starte die Flet-App
 ft.app(target=main)

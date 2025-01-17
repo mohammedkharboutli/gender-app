@@ -1,20 +1,20 @@
 import flet as ft
-from controller import GenderAppController
 from model.GenderAppModel import GenderAppModel
 from util.Observer import Observer
 
+
 class GenderAppView(Observer):
-    def __init__(self, model):
-        self.model = model
-        self.model.add_observer(self)  # Register the view as an observer
-        self.controller = None  # Placeholder for the controller
+    def __init__(self, model: GenderAppModel):
+        self.model: GenderAppModel = model
+        # Registrieren des Observers mit der View
+        self.model.add_observer(self)
 
         # UI-Komponenten
         self.input_textfield = ft.TextField(
             label="",
             multiline=True,
-            expand=True,  # Ensures the TextField fills the entire container
-            fit_parent_size=True,  # Ensures the TextField fills the entire container
+            expand=True,
+            fit_parent_size=True,
             # min_lines=15,
             text_vertical_align=-1,
             # input_filter=ft.InputFilter(regex_string=r"^[a-zA-Z\s\n\.!?\-\_\|]*$", allow=True, replacement_string=""),
@@ -24,27 +24,32 @@ class GenderAppView(Observer):
             label="",
             multiline=True,
             expand=True,
-            fit_parent_size=True, 
+            fit_parent_size=True,
             text_vertical_align=-1,
             read_only=True,
-
         )
         self.submit_button = ft.ElevatedButton(
             text="Abschicken",
-            icon=ft.Icons.SEND,  # Korrekte Icons-Nutzung
-            on_click=self.on_submit_click
+            icon=ft.Icons.SEND,
+            # events werden im Controller gemanaged!
         )
 
-    def set_controller(self, controller):
-        """
-        Verknüpft die View mit einem Controller.
-        """
-        self.controller = controller
+        self.reset_button = ft.ElevatedButton(
+            text="Zurücksetzen",
+            icon=ft.Icons.DELETE,
+        )
 
-    def build(self):
-        """
-        Erstellt das Layout der View.
-        """
+        self.dropdown = ft.Dropdown(
+            disabled=True,
+            options=[
+                ft.dropdown.Option("Option 1"),
+                ft.dropdown.Option("Option 2"),
+                ft.dropdown.Option("Option 3"),
+            ],
+        )
+
+    def build(self) -> ft.Control:
+        # Layouting für die Darstellung der View
         return ft.Column(
             controls=[
                 ft.Row(
@@ -54,68 +59,56 @@ class GenderAppView(Observer):
                                 controls=[
                                     ft.Text("Eingabe", size=20, weight="bold"),
                                     ft.Container(
-                                        content=self.input_textfield,
-                                        expand=4  # Ensures the TextField fills the full height of the container
+                                        content=self.input_textfield, expand=4
                                     ),
-                                    ft.Container(
-                                        expand=1  # Ensures the container fills the remaining space
-                                    ),
+                                    ft.Container(expand=1),
                                 ],
-                                expand=True  # Ensures the column stretches fully
+                                expand=True,
                             ),
-                            expand=1,  # Left container expands fully
+                            expand=1,
                         ),
-                        ft.VerticalDivider(  # Trennlinie zwischen den Spalten
-                            width=1,
-                            thickness=1,
-                            color="black",
-                            opacity=0.5
+                        ft.VerticalDivider(
+                            width=1, thickness=1, color="black", opacity=0.5
                         ),
                         ft.Container(
                             content=ft.Column(
                                 controls=[
                                     ft.Text("Resultat", size=20, weight="bold"),
                                     ft.Container(
-                                        content=self.output_textfield,
-                                        expand=4  # Ensures the TextField fills the full height of the container
+                                        content=self.output_textfield, expand=4
                                     ),
-                                    ft.Container(
-                                        expand=1  # Ensures the container fills the remaining space
-                                    ),
+                                    ft.Container(expand=1),
                                 ],
-                                expand=True  # Ensures the column stretches fully
+                                expand=True,
                             ),
-                            expand=1,  # Right container expands fully
-                        )
+                            expand=1,
+                        ),
                     ],
-                    expand=True
+                    expand=True,
                 ),
                 ft.Container(
-                    content=self.submit_button,
-                    alignment=ft.alignment.bottom_left,  # Align button to the bottom left
-                    expand=False  # No need to expand this container
-                )
+                    content=ft.Row(
+                        controls=[
+                            self.submit_button,
+                            self.reset_button,
+                            ft.Container(expand=True),
+                            self.dropdown,
+                        ],
+                    ),
+                    alignment=ft.alignment.bottom_left,
+                    expand=False,
+                ),
             ],
-            expand=True  # The entire column stretches to fill the space
+            expand=True,
         )
 
-    def on_text_change(self, e):
-        """
-        Meldet Textänderungen an den Controller.
-        """
-        if self.controller:
-            self.controller.handle_text_change(e.control.value)
+    def update(self) -> None:
+        # Updatet das Textfeld Output mit dem Input aus dem Model
+        self.output_textfield.value = self.model.get_input_text()
+        # Updatet das Textfeld Input mit dem Input aus dem Model
+        self.input_textfield.value = self.model.get_input_text()
+        # (um derzeit Gleichheit zu gewährleisten)
 
-    def on_submit_click(self, e):
-        """
-        Meldet das Klicken des Buttons an den Controller.
-        """
-        if self.controller:
-            self.controller.handle_text_change(self.input_textfield.value)
-
-    def update(self):
-        """
-        Reagiert auf Änderungen im Model und aktualisiert das Ergebnis.
-        """
-        self.output_textfield.value = self.model.get_input()
+        # Aktualisiert das einzelne Element auf der View
         self.output_textfield.update()
+        self.input_textfield.update()

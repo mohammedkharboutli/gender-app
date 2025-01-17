@@ -5,14 +5,24 @@ from view.GenderAppView import GenderAppView
 
 
 class GenderAppController:
-    def __init__(self, model, view):
+    def __init__(self, model: GenderAppModel, view: GenderAppView):
         self.model: GenderAppModel = model
         self.view: GenderAppView = view
-        self.view.set_controller(self)  # Verknüpfe den Controller mit der View
 
-    def handle_text_change(self, text: str) -> None:
-        """
-        Aktualisiert das Model, wenn sich der Text ändert.
-        """
-        print("GenderAppController.handle_text_change:", text)
-        self.model.set_input(text)
+        # Event Management für View:
+        # On-Click-Event für den Abschicken-Button registrieren
+        self.view.submit_button.on_click = self.on_click_submit_button
+        self.view.reset_button.on_click = self.on_click_reset_button
+
+    def on_click_submit_button(self, e: ft.ControlEvent) -> None:
+        # Submit-Button wird geklickt
+        # InputText aus Textfield wird ausgelesen
+        input_text = self.view.input_textfield.value
+        # InputText wird dem Model übergeben
+        self.model.set_input_text(input_text)
+
+    def on_click_reset_button(self, e: ft.ControlEvent) -> None:
+        # Reset-Button wird geklickt
+        # Model wird zurückgesetzt
+        reset_text = ""
+        self.model.set_input_text(reset_text)

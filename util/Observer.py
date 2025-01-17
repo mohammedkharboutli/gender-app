@@ -1,6 +1,8 @@
+from abc import ABC, abstractmethod
 
 
-class Observer:
+class Observer(ABC):
+    @abstractmethod
     def update(self) -> None:
-        """Method to be implemented by concrete observers."""
+        # Methode, die von den Observers implementiert werden muss
         pass
