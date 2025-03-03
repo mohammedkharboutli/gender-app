@@ -6,10 +6,10 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115.6",
+    "flet>=0.25.2",
     "flet-cli>=0.25.2",
     "flet-desktop>=0.25.2",
     "flet-web>=0.25.2",
-    "flet>=0.25.2",
     "uvicorn>=0.34.0",
 ]
 

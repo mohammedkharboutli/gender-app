@@ -12,7 +12,7 @@ def main(page: ft.Page) -> None:
 
     # Initialisiere MVC-Komponenten
     model = GenderAppModel()
-    view = GenderAppView(model)
+    view = GenderAppView(page, model)
     controller = GenderAppController(model, view)
 
     # Füge die View-Komponenten zur Seite hinzu
