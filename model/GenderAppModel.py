@@ -1,3 +1,4 @@
+from model.GenderChecker import GenderChecker
 from util.Observable import Observable
 
 
@@ -20,8 +21,12 @@ class GenderAppModel(Observable):
  
 
     def set_result_text(self, text: str) -> None:
+        # Erstellt ein GenderChecker-Objekt mit dem aktuellen Text
+        checked_text = GenderChecker(text)
+        # Zählt die gendered words
+        result_text = str(checked_text.count_gendered_words())
         # Setzt den aktuellen Text
-        self.result_text: str = text
+        self.result_text: str = result_text
         # Benachrichte alle Abonnenten des Observers
         self.notify_observers()
 
@@ -30,8 +35,12 @@ class GenderAppModel(Observable):
         return self.result_text
     
     def set_output_text(self, text: str) -> None:
+        # Erstellt ein GenderChecker-Objekt mit dem aktuellen Text
+        checked_text = GenderChecker(text) 
+        # Highlighted den Text
+        highlighted_text = checked_text.highlight_gendered_words()
         # Setzt den aktuellen Text
-        self.output_text: str = text
+        self.output_text: str = highlighted_text
         # Benachrichte alle Abonnenten des Observers
         self.notify_observers()
 

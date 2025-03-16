@@ -21,14 +21,8 @@ class GenderAppController:
         input_text = self.view.input_textfield.value
         # InputText wird dem Model übergeben
         self.model.set_input_text(input_text)
-
-        checked_text = GenderChecker(input_text)
-        result_text = str(checked_text.count_gendered_words())
-        self.model.set_result_text(result_text)
-
-        highlighted_text = checked_text.highlight_gendered_words()
-        print(highlighted_text)
-        self.model.set_output_text(highlighted_text)
+        self.model.set_result_text(input_text)
+        self.model.set_output_text(input_text)
 
     def on_click_reset_button(self, e: ft.ControlEvent) -> None:
         # Reset-Button wird geklickt

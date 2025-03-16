@@ -29,7 +29,7 @@ class GenderAppView(Observer):
             autofocus=True,
         )
         self.output_markdown = ft.Markdown(
-            extension_set="gitHubWeb",
+            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
             selectable=True,
         )
 
@@ -107,8 +107,10 @@ class GenderAppView(Observer):
                             content=ft.Column(
                                 controls=[
                                     ft.Text("Resultat", size=20, weight="bold"),
-                                    ft.Container(
-                                        content=self.output_markdown, expand=4
+                                    ft.Column(
+                                        controls=[self.output_markdown], 
+                                        expand=4,
+                                        scroll=True,
                                     ),
                                     # ft.Container(expand=1),
                                 ],
